@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resume AI Analyst</title>
+    <style>
+        /* Professional Ocean & Slate Theme Variables */
+        :root {
+            /* Soft, clean gray-blue background */
+            --bg-gradient: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+            --text-color: #334155;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+
+            /* Professional Teal & Blue */
+            --primary-color: #0f766e;
+            --secondary-color: #0369a1;
+
+            --success-bg: #dcfce7;
+            --success-text: #166534;
+            --danger-bg: #fee2e2;
+            --danger-text: #991b1b;
+        }
+
+        body.dark-mode {
+            /* Deep, professional slate background */
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --text-color: #f8fafc;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+
+            /* Vibrant Teal & Sky Blue for dark mode contrast */
+            --primary-color: #14b8a6;
+            --secondary-color: #38bdf8;
+
+            --success-bg: #064e3b;
+            --success-text: #34d399;
+            --danger-bg: #7f1d1d;
+            --danger-text: #fca5a5;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-color);
+            margin: 0;
+            padding: 30px 20px;
+            transition: background 0.4s ease, color 0.4s ease;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .header h2 {
+            margin: 0;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 28px;
+            letter-spacing: -0.5px;
+        }
+
+        .theme-toggle {
+            padding: 8px 14px;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* Cards and Forms */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-top: 4px solid var(--primary-color);
+            transition: background-color 0.4s ease;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--primary-color);
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: transparent;
+            color: var(--text-color);
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+        }
+
+        /* Buttons */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+
+        .btn:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        /* File Input */
+        .file-upload-box {
+            border: 2px dashed var(--primary-color);
+            background-color: rgba(15, 118, 110, 0.03);
+            padding: 25px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: background-color 0.2s;
+        }
+
+        .file-upload-box:hover {
+            background-color: rgba(15, 118, 110, 0.08);
+        }
+
+        .error-msg {
+            color: var(--danger-text);
+            background-color: var(--danger-bg);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Results Section */
+        #results {
+            display: none;
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background-color: var(--border-color);
+            border-radius: 10px;
+            height: 22px;
+            margin: 15px 0 25px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .score-text {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 15px;
+            color: var(--secondary-color);
+        }
+
+        h4 {
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .chip-container {
+            margin-bottom: 20px;
+        }
+
+        .chip {
+            display: inline-block;
+            padding: 6px 12px;
+            margin: 0 6px 6px 0;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .chip-found {
+            background-color: var(--success-bg);
+            color: var(--success-text);
+            border: 1px solid var(--success-text);
+        }
+
+        .chip-missing {
+            background-color: var(--danger-bg);
+            color: var(--danger-text);
+            border: 1px solid var(--danger-text);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h2>Resume AI Analyst</h2>
+            <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">Dark Mode</button>
+        </div>
+
+        <div class="card">
+            <div class="form-group">
+                <label>Candidate Name</label>
+                <input type="text" id="candidateName" placeholder="Enter candidate name">
+            </div>
+
+            <div class="form-group">
+                <label>Industry</label>
+                <select id="categorySelect" onchange="loadRoles(this.value)">
+                    <option value="">— Select an Industry —</option>
+                    <option value="Technology (IT & Software)">Technology (IT & Software)</option>
+                    <option value="Arts & Design">Arts & Design</option>
+                    <option value="Medical & Healthcare">Medical & Healthcare</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Target Job Role</label>
+                <select id="roleSelect" disabled onchange="checkReadyState()">
+                    <option value="">— Select an Industry First —</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="card">
+            <label>Resume Upload (PDF Only)</label>
+            <div class="file-upload-box">
+                <input type="file" id="fileInput" accept=".pdf" onchange="handleFile(this)">
+                <p id="fileName" style="margin-top: 10px; font-size: 14px; font-weight: 600;"></p>
+            </div>
+
+            <button class="btn" id="analyzeBtn" onclick="analyzeResume()" disabled>Analyze Resume</button>
+            <div id="errorMsg" class="error-msg"></div>
+        </div>
+
+        <div class="card" id="results">
+            <h3 style="margin-top: 0; color: var(--primary-color);">Analysis Results</h3>
+            <p><strong>Role:</strong> <span id="res-role"></span></p>
+            <p><strong>Industry:</strong> <span id="res-desc"></span></p>
+
+            <div class="score-text"><span id="res-score-num">0</span>% Match</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressBarFill"></div>
+            </div>
+
+            <h4>✅ Matched Skills</h4>
+            <div class="chip-container" id="res-found"></div>
+
+            <h4>❌ Missing Skills</h4>
+            <div class="chip-container" id="res-missing"></div>
+
+            <button class="btn btn-outline" id="downloadBtn" onclick="downloadReport()">
+                Download PDF Report
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        const API = "http://127.0.0.1:5000";
+        let selectedFile = null;
+        let lastResult = null;
+
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById("theme-btn");
+            body.classList.toggle("dark-mode");
+            if (body.classList.contains("dark-mode")) {
+                btn.textContent = "Light Mode";
+                localStorage.setItem("theme", "dark");
+            } else {
+                btn.textContent = "Dark Mode";
+                localStorage.setItem("theme", "light");
+            }
+        }
+
+        if (localStorage.getItem("theme") === "dark") {
+            toggleTheme();
+        }
+
+        function showError(message) {
+            const errDiv = document.getElementById("errorMsg");
+            errDiv.textContent = message;
+            errDiv.style.display = "block";
+            setTimeout(() => errDiv.style.display = "none", 5000);
+        }
+
+        // Load Roles
+        async function loadRoles(category) {
+            const roleSelect = document.getElementById("roleSelect");
+            roleSelect.innerHTML = '<option value="">— Loading... —</option>';
+            roleSelect.disabled = true;
+            checkReadyState();
+
+            if (!category) {
+                roleSelect.innerHTML = '<option value="">— Select an Industry First —</option>';
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API}/api/roles/${encodeURIComponent(category)}`);
+                if (!res.ok) throw new Error("Failed to fetch roles");
+                const roles = await res.json();
+
+                roleSelect.innerHTML = '<option value="">— Choose a Job Role —</option>';
+                roles.forEach(r => {
+                    let opt = document.createElement("option");
+                    opt.value = r; opt.textContent = r;
+                    roleSelect.appendChild(opt);
+                });
+                roleSelect.disabled = false;
+            } catch (err) {
+                showError("Could not connect to the backend.");
+                roleSelect.innerHTML = '<option value="">— Error —</option>';
+            }
+        }
+
+        // File Handling
+        function handleFile(input) {
+            if (input.files.length === 0) return;
+            const file = input.files[0];
+
+            if (!file.name.endsWith(".pdf")) {
+                showError("Please upload a PDF file.");
+                input.value = "";
+                selectedFile = null;
+                document.getElementById("fileName").textContent = "";
+            } else {
+                selectedFile = file;
+                document.getElementById("fileName").textContent = "Selected: " + file.name;
+            }
+            checkReadyState();
+        }
+
+        function checkReadyState() {
+            const cat = document.getElementById("categorySelect").value;
+            const role = document.getElementById("roleSelect").value;
+            document.getElementById("analyzeBtn").disabled = !(selectedFile && cat && role);
+        }
+
+        // Analyze Resume
+        async function analyzeResume() {
+            const btn = document.getElementById("analyzeBtn");
+            const category = document.getElementById("categorySelect").value;
+            const role = document.getElementById("roleSelect").value;
+
+            btn.disabled = true;
+            btn.textContent = "Analyzing...";
+            document.getElementById("results").style.display = "none";
+
+            // Reset progress bar width before showing
+            document.getElementById("progressBarFill").style.width = "0%";
+
+            const form = new FormData();
+            form.append("category", category);
+            form.append("role", role);
+            form.append("resume", selectedFile);
+
+            try {
+                const res = await fetch(`${API}/api/analyze`, { method: "POST", body: form });
+                const data = await res.json();
+
+                if (data.error) throw new Error(data.error);
+
+                lastResult = data;
+
+                // Populate Results
+                document.getElementById("res-role").textContent = data.role;
+                document.getElementById("res-desc").textContent = category;
+                document.getElementById("res-score-num").textContent = data.percent;
+
+                // Chips
+                const foundDiv = document.getElementById("res-found");
+                foundDiv.innerHTML = (data.matched || []).map(s => `<span class="chip chip-found">${s}</span>`).join("") || "None detected";
+
+                const missingDiv = document.getElementById("res-missing");
+                missingDiv.innerHTML = (data.missing || []).map(s => `<span class="chip chip-missing">${s}</span>`).join("") || "All skills present!";
+
+                document.getElementById("results").style.display = "block";
+
+                // Animate progress bar after displaying container
+                setTimeout(() => {
+                    const progressFill = document.getElementById("progressBarFill");
+                    progressFill.style.width = data.percent + "%";
+
+                    if (data.percent < 50) {
+                        progressFill.style.background = "linear-gradient(90deg, #ef4444, #b91c1c)";
+                    } else if (data.percent < 80) {
+                        progressFill.style.background = "linear-gradient(90deg, #f59e0b, #d97706)";
+                    } else {
+                        progressFill.style.background = "linear-gradient(90deg, var(--primary-color), var(--secondary-color))";
+                    }
+                }, 50);
+
+                document.getElementById("results").scrollIntoView({ behavior: 'smooth' });
+
+            } catch (err) {
+                showError(err.message || "Cannot connect to server.");
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Analyze Resume";
+            }
+        }
+
+        // Download Report
+        async function downloadReport() {
+            if (!lastResult) return;
+            const btn = document.getElementById("downloadBtn");
+            btn.textContent = "Generating...";
+            btn.disabled = true;
+
+            const payload = {
+                name: document.getElementById("candidateName").value || "Candidate",
+                role: lastResult.role,
+                percent: lastResult.percent,
+                matched: lastResult.matched,
+                missing: lastResult.missing
+            };
+
+            try {
+                const res = await fetch(`${API}/api/download_report`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                const blob = await res.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url; a.download = "Resume_Report.pdf"; a.click();
+                URL.revokeObjectURL(url);
+            } catch (e) {
+                showError("Failed to download PDF.");
+            } finally {
+                btn.textContent = "Download PDF Report";
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+
+</html>
